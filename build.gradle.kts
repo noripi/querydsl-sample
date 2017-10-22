@@ -1,4 +1,8 @@
+import org.gradle.api.AntBuilder
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
+import java.io.File
+
+configurations.create("querydsl")
 
 buildscript {
     var kotlinVersion: String? by extra; kotlinVersion = "1.1.51"
@@ -27,6 +31,10 @@ dependencies {
     val kotlinVersion: String? by extra
     val querydslVersion: String? by extra
 
+    val querydsl = "querydsl"
+    querydsl("com.querydsl:querydsl-sql-codegen:$querydslVersion")
+    querydsl("mysql:mysql-connector-java:5.1.36")
+
     compileOnly(gradleApi())
     compile("mysql:mysql-connector-java:5.1.36")
     compile("com.querydsl:querydsl-sql:$querydslVersion")
@@ -39,3 +47,33 @@ configure<ApplicationPluginConvention> {
     group = "io.github.noripi"
     version = "0.1"
 }
+
+task("generateQueryClass") {
+    doLast {
+        val dbHost = "localhost"
+        val dbUser = System.getenv("DB_USER")
+        val dbPass = System.getenv("DB_PASSWORD")
+        val dbName = "test"
+        val tableNames = "restaurant"
+
+        ant.taskdef(
+                name = "export",
+                classname = "com.querydsl.sql.codegen.ant.AntMetaDataExporter",
+                classpath = configurations.getByName("querydsl").asPath
+        )
+        ant.invokeMethod("export", mapOf(
+                "jdbcUrl" to "jdbc:mysql://$dbHost/$dbName",
+                "jdbcUser" to dbUser,
+                "jdbcPassword" to dbPass,
+                "jdbcDriver" to "com.mysql.jdbc.Driver",
+                "packageName" to "io.github.noripi.querydsl_sample.query",
+                "targetFolder" to "./generated/src/java",
+                "tableNamePattern" to tableNames
+        ))
+
+    }
+}
+
+// custom extension function for build.gradle
+fun AntBuilder.taskdef(name: String, classname: String, classpath: String) = this.invokeMethod(
+        "taskdef", mapOf("name" to name, "classname" to classname, "classpath" to classpath))
