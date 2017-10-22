@@ -23,6 +23,8 @@
  */
 package io.github.noripi.querydsl_sample.main
 
+import io.github.noripi.querydsl_sample.db.JdbcSample
+
 fun main(args: Array<String>) {
-    println("hello")
+    println(JdbcSample.getRestaurant(100))
 }
