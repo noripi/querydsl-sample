@@ -44,7 +44,7 @@ object JdbcSample {
         resultSet.close()
         statement.close()
         conn.close()
-        
+
         return restaurant
     }
 }
