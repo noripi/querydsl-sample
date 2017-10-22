@@ -52,7 +52,7 @@ configure<ApplicationPluginConvention> {
     version = "0.1"
 }
 
-task("generateQueryClass") {
+val generateQueryClass = task("generateQueryClass") {
     doLast {
         val dbHost = "localhost"
         val dbUser = System.getenv("DB_USER")
@@ -77,6 +77,8 @@ task("generateQueryClass") {
 
     }
 }
+
+tasks.getByName("compileKotlin").dependsOn(generateQueryClass)
 
 // custom extension function for build.gradle
 fun AntBuilder.taskdef(name: String, classname: String, classpath: String) = this.invokeMethod(
