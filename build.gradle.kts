@@ -42,6 +42,10 @@ dependencies {
     compile("org.jetbrains.kotlinx:kotlinx-support-jdk8:0.3")
 }
 
+configure<JavaPluginConvention> {
+    sourceSets.getByName("main").java.srcDirs("./generated/src/java")
+}
+
 configure<ApplicationPluginConvention> {
     mainClassName = "io.github.noripi.querydsl_sample.main.MainKt"
     group = "io.github.noripi"

@@ -32,7 +32,7 @@ object JdbcSample {
         statement.setInt(1, id)
 
         val resultSet = statement.executeQuery()
-        return if (resultSet.next()) {
+        val restaurant = if (resultSet.next()) {
             Restaurant(
                     id = resultSet.getInt("restaurant_id"),
                     name = resultSet.getString("restaurant_name")
@@ -40,6 +40,12 @@ object JdbcSample {
         } else {
             null
         }
+
+        resultSet.close()
+        statement.close()
+        conn.close()
+        
+        return restaurant
     }
 }
 
