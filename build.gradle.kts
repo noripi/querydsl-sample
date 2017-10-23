@@ -1,6 +1,5 @@
 import org.gradle.api.AntBuilder
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
-import java.io.File
 
 configurations.create("querydsl")
 

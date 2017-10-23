@@ -50,14 +50,13 @@ infix fun SQLInsertClause.COLUMNS(columns: Array<Path<*>>) = this.columns(*colum
 infix fun SQLInsertClause.VALUES(values: Array<Any>) = this.values(*values)
 
 fun SQLInsertClause.onDuplicateKeyUpdate(vararg expressions: Expression<*>): SQLInsertClause {
-    val placeholder: String = (0 until expressions.size).joinToString(", ") { "{$it}" }
+    val placeholder = (0 until expressions.size).joinToString(", ") { "{$it}" }
 
     return this.addFlag(QueryFlag.Position.END,
             ExpressionUtils.template(String::class.java, " on duplicate key update $placeholder",
                     *expressions))
 
 }
-
 
 infix fun SQLInsertClause.ON_DUPLICATE_KEY_UPDATE(expressions: Array<Expression<*>>) = this.onDuplicateKeyUpdate(*expressions)
 infix fun SQLInsertClause.ON_DUPLICATE_KEY_UPDATE(expression: Expression<*>) = this.onDuplicateKeyUpdate(expression)
