@@ -28,6 +28,10 @@ import com.querydsl.core.Tuple
 import com.querydsl.sql.Configuration
 import com.querydsl.sql.MySQLTemplates
 import com.querydsl.sql.SQLQueryFactory
+import io.github.noripi.querydsl_sample.extension.COLUMNS
+import io.github.noripi.querydsl_sample.extension.INSERT_INTO
+import io.github.noripi.querydsl_sample.extension.ON_DUPLICATE_KEY_UPDATE
+import io.github.noripi.querydsl_sample.extension.VALUES
 import io.github.noripi.querydsl_sample.obj.Restaurant
 import io.github.noripi.querydsl_sample.query.QRestaurant
 
@@ -49,6 +53,15 @@ object QueryDslSample {
                 .fetchOne()
 
         return result?.toRestaurant()
+    }
+
+    fun insertOrReplaceRestaurant(id: Int, name: String) {
+        (factory
+                INSERT_INTO r
+                COLUMNS arrayOf(r.restaurantId, r.restaurantName)
+                VALUES arrayOf(id, name)
+                ON_DUPLICATE_KEY_UPDATE r.restaurantName.eq(name)
+        ).execute()
     }
 }
 

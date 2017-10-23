@@ -29,4 +29,6 @@ import io.github.noripi.querydsl_sample.db.QueryDslSample
 fun main(args: Array<String>) {
     println(JdbcSample.getRestaurant(100))
     println(QueryDslSample.getRestaurant(100))
+
+    println(QueryDslSample.insertOrReplaceRestaurant(100, "test"))
 }
